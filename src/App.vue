@@ -5,49 +5,58 @@
         <div class="layui-form-item">
           <label class="layui-form-label">用户名</label>
           <div class="layui-input-inline">
-            <input
-              type="text"
-              name="email"
-              v-validate="'required|email'"
-              placeholder="请输入用户名"
-              class="layui-input"
-              v-model="name"
-            />
-          </div>
-          <div class="error layui-form-mid">
-            <span>{{ errors.first("email") }}</span>
+            <ValidationProvider
+              name="用户名"
+              rules="required|email"
+              v-slot="{ errors }"
+            >
+              <input
+                type="text"
+                placeholder="请输入用户名"
+                class="layui-input"
+                v-model="name"
+              />
+              <span class="error">
+                {{ errors[0] }}
+              </span>
+            </ValidationProvider>
           </div>
         </div>
         <div class="layui-form-item">
           <label class="layui-form-label">密码</label>
           <div class="layui-input-block">
-            <input
-              type="password"
+            <ValidationProvider
               name="password"
-              v-validate="'required|min:6'"
-              placeholder="请输入密码"
-              class="layui-input"
-              v-model="password"
-            />
-          </div>
-          <div class="error layui-form-mid">
-            <span>{{ errors.first("password") }}</span>
+              rules="required|min:6"
+              v-slot="{ errors }"
+            >
+              <input
+                type="password"
+                placeholder="请输入密码"
+                class="layui-input"
+                v-model="password"
+              />
+              <span class="error">{{ errors[0] }}</span>
+            </ValidationProvider>
           </div>
         </div>
         <div class="layui-form-item">
           <label class="layui-form-label">验证码</label>
           <div class="layui-input-inline">
-            <input
-              type="text"
-              name="length"
-              placeholder="请输入验证码"
-              v-validate="{ required: true, length: 4 }"
-              class="layui-input"
-              v-model="code"
-            />
-          </div>
-          <div class="error layui-form-mid">
-            <span>{{ errors.first("length") }}</span>
+            <ValidationProvider
+              name="code"
+              rules="required|length:4"
+              v-slot="{ errors }"
+            >
+              <input
+                type="text"
+                name="length"
+                placeholder="请输入验证码"
+                class="layui-input"
+                v-model="code"
+              />
+              <span class="error">{{ errors[0] }}</span>
+            </ValidationProvider>
           </div>
           <div class="layui-form-mid svg" v-html="svg" @click="getCaptcha">
             辅助文字
@@ -64,8 +73,12 @@
 
 <script>
 import axios from 'axios'
+import { ValidationProvider } from 'vee-validate'
 export default {
   name: 'app',
+  components: {
+    ValidationProvider
+  },
   data () {
     return {
       svg: '',
